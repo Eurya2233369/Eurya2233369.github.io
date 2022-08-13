@@ -11,10 +11,12 @@
     <script src="./assets/libs/ace/ace.js"></script>
     <script src="./assets/libs/ext-language_tools.js"></script>
     <script src="./assets/js/toast.script.js"></script>
-    <script src="./assets/js/FileSaver.min.js" /></script>
-    <script src="./assets/libs/clipboard.min.js" /></script>
+    <script src="./assets/js/FileSaver.min.js" ></script>
+    <script src="./assets/libs/clipboard.min.js" ></script>
     <script src='./assets/js/woeorv.js'></script>
+    <script src='./assets/js/mdui.js'></script>
     <link href="./assets/css/toast.style.css" rel="stylesheet">
+    <link href="./assets/css/mdui.css" rel="stylesheet">
     <style>
     * {
         padding: 0px;
@@ -119,66 +121,45 @@
     </style>
 </head>
 
-<body>
-    <div class="nav"> <a href="javascript:;">在线代码编辑器</a> </div>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-pink" style="padding-top: 40px">
+  <div class="mdui-appbar mdui-appbar-fixed mdui-shadow-0">
+    <div class="mdui-toolbar  mdui-text-color-theme-divider">
+      <span class="mdui-typo-title mdui-text-color-white-icon">在线代码编辑器</span>
+      <div class="mdui-toolbar-spacer"></div>
+      <a class="mdui-btn mdui-btn-icon mdui-text-color-white-icon yunxing"><i class="mdui-icon material-icons">link</i></a>
+      <a class="mdui-btn mdui-btn-icon mdui-text-color-white-icon" mdui-menu="{target: '#example-1'}"><i class="mdui-icon material-icons ">info_outline</i></a> 
+      <ul class="mdui-menu" id="example-1"> 
+        <li class="mdui-menu-item"> <a href="javascript:;" class="mdui-ripple fuzhi" data-clipboard-action="cut" data-clipboard-target="#bar">复制代码</a> </li> 
+        <li class="mdui-menu-item"> <a href="javascript:;" class="mdui-ripple xz">下载代码</a> </li> 
+        <li class="mdui-menu-item"> <a href="javascript:;" class="mdui-ripple nobaocun">清除保存</a> </li> 
+        <li class="mdui-menu-item"> <a href="javascript:;" class="mdui-ripple baocun">保存我的代码</a> </li>
+        <li class="mdui-menu-item"> <a href="javascript:mdui.alert('在线代码编辑器<br>由 柃木秋竹 创建','关于')" class="mdui-ripple">关于</a> </li> 
+      </ul> 
+    </div>
+  </div>
     <div class="main">
         <div class="m">
-            <div class="fzdm">
-                <li class="fuzhi" data-clipboard-action="cut" data-clipboard-target="#bar">复制代码</li>
-                <li class="xz">下载代码</li>
-                <li class="nobaocun">清除保存</li>
-                <li class="baocun">保存我的代码</li>
-                <li class="yunxing">运行</li>
-            </div>
-            <pre id="editor">&lt;!doctype html&gt;
+          <pre id="editor">
+&lt;!doctype html&gt;
 &lt;html&gt;
 &lt;head&gt;
 &lt;meta charset="utf-8"&gt;
 &lt;title&gt;修改代码，点击运行显示结果&lt;/title&gt;
 &lt;!--适应移动端--&gt;
 &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
-&lt;!--css样式--&gt;
-&lt;style&gt;
-    body{background-color: #EBEBEB}
-    .aaa{background-color: #CB4F51;padding: 10px;display: block}
-&lt;/style&gt;
-&lt;!--引用jquery库--&gt;
-&lt;script src="https://libs.baidu.com/jquery/1.11.3/jquery.min.js"&gt;&lt;/script&gt;
 &lt;/head&gt;
-
-&lt;body&gt;
-
-&lt;h3&gt;这是一个简单的点击效果&lt;/h3&gt;
-
-&lt;div class="aaa"&gt;
-    点击我
-&lt;/div&gt;
-
-&lt;script type="text/javascript"&gt;
-    $(document).ready(function(){
-          //点击
-          $(".aaa").click(function(){
-                 alert("你好！");
-          });
-          //悬停到目标上
-          $(".aaa").mouseover(function(){
-                $(this).css("background-color","#0060ff");
-          }); 
-          //悬停离开
-          $(".aaa").mouseout(function(){ 
-                $(this).css("background-color","#CB4F51");
-          });
-    });
-&lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+  &lt;body&gt;
+    &lt;p&gt;Hello Word! &lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt; 
+            </pre>
+            
             <textarea id="bar" style="height: 0px;border-color:#212121;overflow: hidden">yyyyy</textarea>
         </div>
         <div class="m">
             <iframe id="iframe"></iframe>
         </div>
-    </div>
+        </div>
     <script>
     var editor = ace.edit("editor");
     editor.session.setMode("ace/mode/html");
@@ -188,8 +169,12 @@
         enableSnippets: true,
         enableLiveAutocompletion: true
     });
-
-
+    
+    $(function() {
+          if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
+           $('#iframe').remove();
+           }
+     });
     function Run() {
         var o = document.getElementById("iframe");
         ed = document.all ? o.contentWindow.document : o.contentDocument;
@@ -198,12 +183,18 @@
         ed.close();
         ed.contentEditable = true;
         ed.designMode = 'on';
-
     }
-    Run();
+    
+    
     $('.yunxing').click(function() {
+    var sUserAgent = navigator.userAgent.toLowerCase();
+    if (/ipad|iphone|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile/.test(sUserAgent)) {
+           window.sessionStorage.setItem("code",editor.getValue());
+           location.assign("run.html");;
+    } else {
         Run();
-    })
+        }
+    });
 
     $(".baocun").click(function() {
         localStorage.setItem("lastname", editor.getValue());
