@@ -1,2 +1,6 @@
-# lingmuYa.github.io
-一个懒惰的安卓开发者的个人网页
+# Eurya2233368.github.io
+
+ - [ ] 搭建成一个静态博客
+ - [ ] Java小技巧
+ - [ ] Kotlin小技巧
+ - [ ] Rust小技巧
